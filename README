@@ -1,0 +1,61 @@
+### MiniMage とは ###
+
+MiniMage(ミニメイジ)とは、リアルタイムに画像を縮小するPlay framework 2.0製のサーバです。
+Scala と Play framework 2.0 を使用して作られています。
+url上で縮小サイズを指定でき、api経由で画像を登録できます。
+
+### Features ###
+
+主な機能としては
+
+* URLで縮小サイズを指定
+* api経由でサーバに画像を追加
+
+### License ###
+
+MIT licenses
+
+### requirement ###
+
+Sun JDK 1.6 or 1.7 or later
+Scala 1.9.1 or 1.9.2 or later
+Play framework 2.0 or later
+ImageMagick 6.6.0.4 or JMagickが問題なく動かせるバージョン
+JMagick 6.2.6-0-8 or ImageMagickを問題なく動かせるバージョン
+
+### Getting started ###
+
+Sun JDKをインストールします
+Scala 1.9.1をインストールします
+Play frameworkをインストールします
+ImageMagickをインストールします
+JMagickをインストールします
+このアプリケーションを展開します
+lib ディレクトリにJMagick.jarをコピーします
+[play start]コマンドでアプリケーションを実行します
+
+### Making Dist ###
+
+play distで作成したスナップショットは
+Play framework や Scalaが入っていない、Javaだけが入ったマシンでも稼働させることが出来ます。
+作り方は
+プロジェクトルートに入り、playコンソールを起動
+distコマンドを入力
+プロジェクトルートにdistディレクトリが出来ているので、この中にあるzipファイルを
+稼働させたいサーバへFTPやSCPでアップロード
+サーバ上でzipを展開し、startコマンドを叩けば、起動できます。
+
+### 今後の予定 ###
+
+まだ画像クロップ機能について実装できていないので、そこを実装
+まだScalaっぽく書けていない気がするので、Scalaっぽく書き直す
+縁取りくらいは新たに実装したい
+
+### Options of both classes ###
+    
+#### Troubleshooting ####
+
+Copyright 2006-2012 © GENDOSU
+
+Gen Takahashi <gendosu@gmail.com>
+Twitter: gendosu

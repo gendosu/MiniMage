@@ -1,0 +1,15 @@
+# Routes
+# This file defines all application routes (Higher priority routes first)
+# ~~~~
+
+# Home page
+GET     /                           controllers.Application.index
+GET     /tmp/images/:imageType/:year/:month/:day/:imageId/:hash.:ext       controllers.TmpImagesController.index(imageType, year:Int, month:Int, day:Int, imageId, size = "org", hash, ext)
+GET     /tmp/images/:imageType/:year/:month/:day/:imageId/:size/:hash.:ext controllers.TmpImagesController.index(imageType, year:Int, month:Int, day:Int, imageId, size, hash, ext)
+GET     /images/:imageType/:year/:month/:day/:imageId/:hash.:ext           controllers.ImagesController.index(imageType, year:Int, month:Int, day:Int, imageId, size = "org", hash, ext)
+GET     /images/:imageType/:year/:month/:day/:imageId/:size/:hash.:ext     controllers.ImagesController.index(imageType, year:Int, month:Int, day:Int, imageId, size, hash, ext)
+POST    /api/upload                                                        controllers.ApiController.upload
+PUT     /api/commit/:imageType/:year/:month/:day/:imageId.:ext             controllers.ApiController.commit(imageType, year:Int, month:Int, day:Int, imageId, ext)
+
+# Map static resources from the /public folder to the /assets URL path
+GET     /assets/*file               controllers.Assets.at(path="/public", file)
