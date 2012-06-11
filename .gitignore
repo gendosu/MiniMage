@@ -1,0 +1,7 @@
+/target
+/.settings
+/.classpath
+/.project
+/project/target
+/project/project/target
+/lib/jmagick6-6.2.6-0.jar
