@@ -24,6 +24,7 @@ PID_FILE=$CUR_DIR/pid
 start()
 {
 /usr/bin/jsvc \
+#        -Dconfig.resource=prod.conf \
         -home $JAVA_HOME \
         -user super \
         -cp $CLASSPATH \
