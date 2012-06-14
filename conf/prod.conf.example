@@ -1,0 +1,20 @@
+include "application.conf"
+
+key.to.override=blah
+
+
+
+
+
+# Root logger:
+logger.root=INFO
+
+# Logger used by the framework:
+logger.play=INFO
+
+# Logger provided to your application:
+logger.application=INFO
+
+# 画像の保存ディレクトリ
+images.directory="/home/hoge/images"
+images.tmpDirectory="/home/hoge/images.tmp"
