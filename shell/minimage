@@ -1,15 +1,31 @@
 #/bin/sh
+touch /tmp/gen.txt
 
-BACKUP_DIR=`pwd`
+### BEGIN INIT INFO
+# Provides:          minimage
+# Required-Start:    $remote_fs $syslog
+# Required-Stop:     $remote_fs $syslog
+# Should-Start:      festival
+# Should-Stop:       festival
+# Default-Start:     2 3 4 5
+# Default-Stop:      0 1 6
+# Short-Description: minimage
+# Description:       minimage
+### END INIT INFO
+
+
+JAVA_HOME=/usr/lib/jvm/java-6-openjdk-amd64
 cd /home/super/git/MiniMage/dist/minimage-1.0-SNAPSHOT
+BACKUP_DIR=`pwd`
 CUR_DIR=`pwd`
 CLASSPATH=:$CUR_DIR:/usr/share/java/commons-daemon.jar:$CUR_DIR/lib/*
-PID_FILE=./pidfile
+PID_FILE=$CUR_DIR/pid
 
 start()
 {
 /usr/bin/jsvc \
         -home $JAVA_HOME \
+        -user super \
         -cp $CLASSPATH \
         -pidfile $PID_FILE \
         -debug -verbose \
