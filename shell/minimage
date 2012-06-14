@@ -1,0 +1,45 @@
+#/bin/sh
+
+BACKUP_DIR=`pwd`
+cd /home/super/git/MiniMage/dist/minimage-1.0-SNAPSHOT
+CUR_DIR=`pwd`
+CLASSPATH=:$CUR_DIR:/usr/share/java/commons-daemon.jar:$CUR_DIR/lib/*
+PID_FILE=./pidfile
+
+start()
+{
+/usr/bin/jsvc \
+        -home $JAVA_HOME \
+        -cp $CLASSPATH \
+        -pidfile $PID_FILE \
+        -debug -verbose \
+        -outfile stdout.log \
+        -errfile '&1' \
+        daemon.AppDaemon $CUR_DIR
+}
+
+stop()
+{
+/usr/bin/jsvc \
+        -stop \
+        -pidfile $PID_FILE \
+        daemon.AppDaemon
+}
+
+case "$1" in
+  start)
+        start
+        ;;
+  stop)
+        stop
+        ;;
+  restart)
+        stop
+        start
+        ;;
+  *)
+        echo "Usage $0 start/stop"
+        exit 1;;
+esac
+
+cd $BACKUP_DIR
