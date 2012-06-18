@@ -25,6 +25,7 @@ start()
 {
 /usr/bin/jsvc \
 #        -Dconfig.resource=prod.conf \
+        -Dhttp.port=80 \
         -home $JAVA_HOME \
         -user super \
         -cp $CLASSPATH \
