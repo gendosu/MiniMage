@@ -1,10 +1,7 @@
 include "application.conf"
 
-key.to.override=blah
-
-
-
-
+# シークレットキー
+secretkey="secret"
 
 # Root logger:
 logger.root=INFO
