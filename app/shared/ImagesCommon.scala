@@ -5,6 +5,8 @@ import play.api.libs.iteratee.Enumerator
 import magick.MagickImage
 import magick.ImageInfo
 import magick.CompositeOperator
+import java.math.MathContext
+import java.math.RoundingMode
 
 trait ImagesCommon extends Controller with Common {
   // 画像サイズ指定部分の文字列解析用正規表現
@@ -46,20 +48,23 @@ trait ImagesCommon extends Controller with Common {
           // x,yのサイズに収まるように縦横比を維持したまま縮小
           // 空白領域はr,g,bで指定された色で塗りつぶす
           // TODO 縦横比を固定で、x,yの範囲に収まるように拡大縮小
-          val scaleX = x.toFloat / image.getDimension.getWidth
-          val scaleY = y.toFloat / image.getDimension.getHeight
+          val dimensionWidth = BigDecimal(image.getDimension.getWidth)
+          val dimensionHeight = BigDecimal(image.getDimension.getHeight)
+          
+          val scaleX = if(x.toFloat < image.getDimension.getWidth){BigDecimal(x) / dimensionWidth} else {BigDecimal(1)}
+          val scaleY = if(y.toFloat < image.getDimension.getHeight){BigDecimal(y) / dimensionHeight} else{BigDecimal(1)}
           
           val baseInfo = new ImageInfo("xc:#%s%s%s" format(r, g, b))
           baseInfo.setSize("%sx%s" format(x, y))
           val baseImage = new MagickImage(baseInfo)
           
           if(scaleX > scaleY) {
-            val scaledImage = image.scaleImage((image.getDimension.getWidth * scaleY).toInt, (image.getDimension.getHeight * scaleY).toInt)
-            baseImage.compositeImage(CompositeOperator.SrcOverCompositeOp, scaledImage, ((x.toInt / 2) - ((image.getDimension.getWidth * scaleY) / 2)).toInt, 0)
+            val scaledImage = image.scaleImage((dimensionWidth * scaleY).setScale(0, scala.math.BigDecimal.RoundingMode.HALF_UP).toInt, (dimensionHeight * scaleY).setScale(0, scala.math.BigDecimal.RoundingMode.HALF_UP).toInt)
+            baseImage.compositeImage(CompositeOperator.SrcOverCompositeOp, scaledImage, ((BigDecimal(x) / BigDecimal(2)) - ((dimensionWidth * scaleY) / BigDecimal(2))).setScale(0, scala.math.BigDecimal.RoundingMode.HALF_UP).toInt, ((BigDecimal(y) / BigDecimal(2)) - ((dimensionHeight * scaleY) / BigDecimal(2))).setScale(0, scala.math.BigDecimal.RoundingMode.HALF_UP).toInt)
             scaledImage.destroyImages
           } else {
-            val scaledImage = image.scaleImage((image.getDimension.getWidth * scaleX).toInt, (image.getDimension.getHeight * scaleX).toInt)
-            baseImage.compositeImage(CompositeOperator.SrcOverCompositeOp, scaledImage, 0, ((y.toInt / 2) - ((image.getDimension.getHeight * scaleX) / 2)).toInt)
+            val scaledImage = image.scaleImage((dimensionWidth * scaleX).setScale(0, scala.math.BigDecimal.RoundingMode.HALF_UP).toInt, (dimensionHeight * scaleX).setScale(0, scala.math.BigDecimal.RoundingMode.HALF_UP).toInt)
+            baseImage.compositeImage(CompositeOperator.SrcOverCompositeOp, scaledImage, ((BigDecimal(x) / BigDecimal(2)) - ((dimensionWidth * scaleX) / BigDecimal(2))).setScale(0, scala.math.BigDecimal.RoundingMode.HALF_UP).toInt, ((BigDecimal(y) / BigDecimal(2)) - ((dimensionHeight * scaleX) / BigDecimal(2))).setScale(0, scala.math.BigDecimal.RoundingMode.HALF_UP).toInt)
             scaledImage.destroyImages
           }
           
@@ -73,12 +78,12 @@ trait ImagesCommon extends Controller with Common {
         }
         case regXY(x, y) => {
           // TODO 縦横比を固定で、x,yの範囲に収まるように拡大縮小
-          val scaleX = x.toFloat / image.getDimension.getWidth
-          val scaleY = y.toFloat / image.getDimension.getHeight
+          val scaleX = if(x.toFloat < image.getDimension.getWidth){BigDecimal(x) / BigDecimal(image.getDimension.getWidth)} else {BigDecimal(1)}
+          val scaleY = if(y.toFloat < image.getDimension.getHeight){BigDecimal(y) / BigDecimal(image.getDimension.getHeight)} else {BigDecimal(1)}
           if(scaleX > scaleY) {
-            Some(image.scaleImage((image.getDimension.getWidth * scaleY).toInt, (image.getDimension.getHeight * scaleY).toInt))
+            Some(image.scaleImage((image.getDimension.getWidth * scaleY).setScale(0, scala.math.BigDecimal.RoundingMode.HALF_UP).toInt, (image.getDimension.getHeight * scaleY).setScale(0, scala.math.BigDecimal.RoundingMode.HALF_UP).toInt))
           } else {
-            Some(image.scaleImage((image.getDimension.getWidth * scaleX).toInt, (image.getDimension.getHeight * scaleX).toInt))
+            Some(image.scaleImage((image.getDimension.getWidth * scaleX).setScale(0, scala.math.BigDecimal.RoundingMode.HALF_UP).toInt, (image.getDimension.getHeight * scaleX).setScale(0, scala.math.BigDecimal.RoundingMode.HALF_UP).toInt))
           }
         }
         case regY(y) => {

@@ -10,6 +10,7 @@ GET     /images/:imageType/:year/:month/:day/:imageId/:hash.:ext           contr
 GET     /images/:imageType/:year/:month/:day/:imageId/:size/:hash.:ext     controllers.ImagesController.index(imageType, year:Int, month:Int, day:Int, imageId, size, hash, ext)
 POST    /api/upload                                                        controllers.ApiController.upload
 PUT     /api/commit/:imageType/:year/:month/:day/:imageId.:ext             controllers.ApiController.commit(imageType, year:Int, month:Int, day:Int, imageId, ext)
+PUT     /api/delete/:imageType/:year/:month/:day/:imageId.:ext             controllers.ApiController.delete(imageType, year:Int, month:Int, day:Int, imageId, ext)
 
 # Map static resources from the /public folder to the /assets URL path
-GET     /assets/*file               controllers.Assets.at(path="/public", file)
+GET     /*file               controllers.Assets.at(path="/public", file)

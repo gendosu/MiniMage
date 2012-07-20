@@ -138,4 +138,43 @@ object ApiController extends Controller with Common {
       case e => InternalServerError(Json.toJson(Map("success" -> "false", "message" -> "予期せぬエラーが発生しました")))
     }
   }
+  
+  /*
+   * [images.Directory]ディレクトリにアップロードされている画像ファイルを削除するためのAPIインターフェース
+   * 
+   * 実際のリクエストは
+   *  /api/delete/:imageType/:year/:month/:day/:imageId.:ext
+   * という形でURLにアクセスされたときにコミットとする
+   * 
+   * パラメータ
+   * imageType :: 確定させたい画像ファイルのイメージ種類
+   * year :: 確定させたい画像ファイルの年
+   * month :: 確定させたい画像ファイルの月
+   * day :: 確定させたい画像ファイルの日
+   * ext:: 確定させたい画像ファイルの拡張子
+   */
+  def delete(imageType:String, year:Int, month:Int, day:Int, imageId:String, ext:String) = Action {
+    val startNanoSecond = System.nanoTime
+    
+    try {
+      // ファイルのフルパスを作成
+      val filePath = getFilePath(imageType, year, month, day, ext, imageId)
+      val file = new File(filePath)
+      
+      // 実領域にファイルが存在したら、削除
+      if(file.exists) {
+        val result = file.delete
+
+        if(result) {
+          Ok(Json.toJson(Map("success" -> "true", "message" -> "ファイル削除完了")))
+        } else {
+          InternalServerError(Json.toJson(Map("success" -> "false", "message" -> "ファイル削除エラー")))
+        }
+      } else {
+        Ok(Json.toJson(Map("success" -> "true", "message" -> "ファイル削除済み、または未登録")))
+      }
+    } catch {
+      case e => InternalServerError(Json.toJson(Map("success" -> "false", "message" -> "予期せぬエラーが発生しました")))
+    }
+  }
 }
