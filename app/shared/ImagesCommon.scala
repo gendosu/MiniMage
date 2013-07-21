@@ -113,7 +113,7 @@ trait ImagesCommon extends Controller with Common {
         val fileContent: Enumerator[Array[Byte]] = Enumerator.fromFile(file)
         
         val result = SimpleResult(
-            header = ResponseHeader(200),
+            header = ResponseHeader(200, Map("Cache-Control" -> ("max-age=" + cacheExpire.toString()))),
             body = Enumerator.apply(image2.imageToBlob(afterInfo))
         )
         
